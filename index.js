@@ -60,7 +60,7 @@ app.get('/gpt4-convo', async (req, res) => {
   if (prompt.toLowerCase() === 'hello') {
     return res.json({
       status: true,
-      response: "Hi! Ako ang custom AI mo 😎 Kumusta ka?"
+      response: "Hello kaon ka tae?"
     });
   }
 
