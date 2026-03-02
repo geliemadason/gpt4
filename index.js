@@ -47,14 +47,23 @@ app.get('/gpt4-convo', async (req, res) => {
   }
 
   try {
-    // Clear conversation
-    if (prompt.toLowerCase() === 'clear') {
-      clearConversation(uid);
-      return res.json({
-        status: true,
-        message: 'Conversation history cleared'
-      });
-    }
+  // Clear conversation
+  if (prompt.toLowerCase() === 'clear') {
+    clearConversation(uid);
+    return res.json({
+      status: true,
+      message: 'Conversation history cleared'
+    });
+  }
+
+  // 👉 ILAGAY MO DITO
+  if (prompt.toLowerCase() === 'hello') {
+    return res.json({
+      status: true,
+      response: "Hi! Ako ang custom AI mo 😎 Kumusta ka?"
+    });
+  }
+
 
     let conversation = loadConversation(uid);
 
