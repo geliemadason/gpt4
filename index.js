@@ -47,39 +47,14 @@ app.get('/gpt4-convo', async (req, res) => {
   }
 
   try {
-   // Clear conversation
-if (prompt.toLowerCase() === 'clear') {
-  clearConversation(uid);
-  return res.json({
-    status: true,
-    message: 'Conversation history cleared'
-  });
-}
-
-// 👉 DITO MO ILALAGAY
-if (prompt.toLowerCase() === 'hello') {
-  return res.json({
-    status: true,
-    response: "Hello i know gusto ka'g kachat, adto sa akong owner kay para maka testing na ka ma treat og right"
-  });
- }
-if (prompt.toLowerCase() === 'hi') {
-  return res.json({
-    status: true,
-    response: "Hi pud! eat tae sis"
-  });
-}
-    
-
-if (prompt.toLowerCase() === 'owner') {
-  return res.json({
-    status: true,
-    response: "nganong mangita man kas owner, ibog ka?"
-  });
+    // Clear conversation
+    if (prompt.toLowerCase() === 'clear') {
+      clearConversation(uid);
+      return res.json({
+        status: true,
+        message: 'Conversation history cleared'
+      });
     }
-
-    
-}
 
     let conversation = loadConversation(uid);
 
