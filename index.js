@@ -46,33 +46,32 @@ app.get('/gpt4-convo', async (req, res) => {
     });
   }
 
-  try {
-  // Clear conversation
-  if (prompt.toLowerCase() === 'clear') {
-    clearConversation(uid);
-    return res.json({
-      status: true,
-      message: 'Conversation history cleared'
-    });
-  }
+  const lowerPrompt = prompt.toLowerCase();
 
-  // 👉 ILAGAY MO DITO
-  const customResponses = {
-    hello: "Helle kupal, kung gusto ka'g kachat adto ni raniel!",
-    hi: "Hi dogs, kaon ka tae?",
-    owner: "Owner nako si raniel BSIT student!",
-    raniel: "ngita man kang raniel ibog ka? yak!",
-    
-  };
+// Clear
+if (lowerPrompt === 'clear') {
+  clearConversation(uid);
+  return res.json({
+    status: true,
+    message: 'Conversation history cleared'
+  });
+}
 
-  for (const keyword in customResponses) {
-    if (lowerPrompt.includes(keyword)) {
-      return res.json({
-        status: true,
-        response: customResponses[keyword]
-      });
-    }
-  }
+// 👉 Detect HELLO kahit saan
+if (lowerPrompt.includes('hello')) {
+  return res.json({
+    status: true,
+    response: "Hello need ka'g ka chat? adto chat sa owner kay e treat ka niyag right promise"
+  });
+}
+
+// 👉 Detect POWDER kahit saan
+if (lowerPrompt.includes('owner')) {
+  return res.json({
+    status: true,
+    response: "nganong nangita man kas owner, totoy ka? "
+  });
+}
 
 
     let conversation = loadConversation(uid);
