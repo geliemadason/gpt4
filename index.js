@@ -1,3 +1,40 @@
+const express = require('express');
+const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+const convoFile = path.join(__dirname, 'convo.json');
+const apiUrl = 'https://www.pinoygpt.com/api/chat_response.php';
+
+// Ensure convo file exists
+if (!fs.existsSync(convoFile)) {
+  fs.writeFileSync(convoFile, JSON.stringify({}), 'utf-8');
+}
+
+function loadConversation(uid) {
+  const convos = JSON.parse(fs.readFileSync(convoFile, 'utf-8'));
+  return convos[uid] || [];
+}
+
+function saveConversation(uid, messages) {
+  const convos = JSON.parse(fs.readFileSync(convoFile, 'utf-8'));
+  convos[uid] = messages;
+  fs.writeFileSync(convoFile, JSON.stringify(convos, null, 2), 'utf-8');
+}
+
+function clearConversation(uid) {
+  const convos = JSON.parse(fs.readFileSync(convoFile, 'utf-8'));
+  delete convos[uid];
+  fs.writeFileSync(convoFile, JSON.stringify(convos, null, 2), 'utf-8');
+}
+
+/**
+ * API Endpoint
+ * GET /gpt4-convo?prompt=&uid=
+ */
 app.get('/gpt4-convo', async (req, res) => {
   const { prompt, uid } = req.query;
 
@@ -10,32 +47,39 @@ app.get('/gpt4-convo', async (req, res) => {
   }
 
   try {
-    const lowerPrompt = prompt.toLowerCase();
+   // Clear conversation
+if (prompt.toLowerCase() === 'clear') {
+  clearConversation(uid);
+  return res.json({
+    status: true,
+    message: 'Conversation history cleared'
+  });
+}
 
-    // CLEAR
-    if (lowerPrompt === 'clear') {
-      clearConversation(uid);
-      return res.json({
-        status: true,
-        message: 'Conversation history cleared'
-      });
+// 👉 DITO MO ILALAGAY
+if (prompt.toLowerCase() === 'hello') {
+  return res.json({
+    status: true,
+    response: "Hello i know gusto ka'g kachat, adto sa akong owner kay para maka testing na ka ma treat og right"
+  });
+ }
+if (prompt.toLowerCase() === 'hi') {
+  return res.json({
+    status: true,
+    response: "Hi pud! eat tae sis"
+  });
+}
+    
+
+if (prompt.toLowerCase() === 'owner') {
+  return res.json({
+    status: true,
+    response: "nganong mangita man kas owner, ibog ka?"
+  });
     }
 
-    // HELLO keyword
-    if (lowerPrompt.includes('hello')) {
-      return res.json({
-        status: true,
-        response: "Hello need ka'g ka chat? adto chat sa owner kay e treat ka niyag right promise"
-      });
-    }
-
-    // OWNER keyword
-    if (lowerPrompt.includes('owner')) {
-      return res.json({
-        status: true,
-        response: "nganong nangita man kas owner, totoy ka?"
-      });
-    }
+    
+}
 
     let conversation = loadConversation(uid);
 
@@ -80,4 +124,8 @@ app.get('/gpt4-convo', async (req, res) => {
       error: 'Failed to connect to GPT API'
     });
   }
+});
+
+app.listen(PORT, () => {
+  console.log(`✅ GPT-4 Conversational API running on port ${PORT}`);
 });
