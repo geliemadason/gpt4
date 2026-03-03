@@ -57,11 +57,21 @@ app.get('/gpt4-convo', async (req, res) => {
   }
 
   // 👉 ILAGAY MO DITO
-  if (prompt.toLowerCase() === 'hello') {
-    return res.json({
-      status: true,
-      response: "Hello kaon ka tae?"
-    });
+  const customResponses = {
+    hello: "Helle kupal, kung gusto ka'g kachat adto ni raniel!",
+    hi: "Hi dogs, kaon ka tae?",
+    owner: "Owner nako si raniel BSIT student!",
+    raniel: "ngita man kang raniel ibog ka? yak!",
+    
+  };
+
+  for (const keyword in customResponses) {
+    if (lowerPrompt.includes(keyword)) {
+      return res.json({
+        status: true,
+        response: customResponses[keyword]
+      });
+    }
   }
 
 
